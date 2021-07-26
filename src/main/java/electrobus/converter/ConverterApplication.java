@@ -18,22 +18,29 @@ public class ConverterApplication {
             SimpleProcessImage spi = null;
             int port = Modbus.DEFAULT_PORT;
 
-            //2. Prepare a process image
+            // Prepare a process image
             spi = new SimpleProcessImage();
 
             Register register1 = new SimpleInputRegister(0);
 
+            // Регистры(input) для сигналов 1 - 4.1
             for (int i = 0; i < 25; i++) {
                 spi.addInputRegister(register1);
             }
 
+            // Флаги для 4.2 - 4.11
             for (int i = 0; i < 10; i++) {
-                spi.addDigitalOut(new SimpleDigitalOut(false));
-                //spi.addDigitalIn(register2);
+                spi.addDigitalIn(new SimpleDigitalIn(false));
             }
 
-            for (int i = 0; i < 20; i++) {
-                spi.addInputRegister(new SimpleRegister(0));
+            // Регистры(input) для сигналов 5.1 - 5.4
+            for (int i = 0; i < 5; i++) {
+                spi.addInputRegister(new SimpleInputRegister(0));
+            }
+
+            // Регистры(holding) для сигналов 1.1 - 1.3
+            for (int i = 0; i < 3; i++) {
+                spi.addRegister(new SimpleRegister(0));
             }
 
 //			Long l = Long.parseLong("978");
@@ -45,7 +52,7 @@ public class ConverterApplication {
             ModbusCoupler.getReference().setUnitID(15);
 
             final InetAddress address = InetAddress.getByName("127.0.0.1");//LAPTOP-M4029LFV
-            //4. Create a listener with 1 threads in pool
+            // Create a listener with 1 threads in pool
             ModbusTCPListener listener = new ModbusTCPListener(1);
             listener.setAddress(address);
             listener.setPort(port);
